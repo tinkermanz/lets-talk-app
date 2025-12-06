@@ -56,7 +56,7 @@
 
 	--radius-lg: var(--radius);
 
-	--radius-xl: calc(var(--radius) + 4px)
+	--radius-xl: calc(var(--radius) + 4px);
 }
 
 :root {
@@ -128,11 +128,17 @@
 	--sidebar-ring: oklch(0.556 0 0);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+@layer components {
+	.menu-item-card {
+		@apply p-10 flex flex-col gap-5 items-center rounded-3xl cursor-pointer transition delay-75 duration-700 ease-in-out hover:-translate-y-1 scale-90 hover:scale-110;
 	}
-  body {
-    @apply bg-background text-foreground;
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
 	}
 }
