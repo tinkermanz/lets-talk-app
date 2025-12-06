@@ -18,6 +18,7 @@ const LoginPage = () => {
 			</section>
 			<div className="flex justify-center">
 				<SignIn
+					routing="hash"
 					appearance={{
 						theme: neobrutalism,
 					}}
