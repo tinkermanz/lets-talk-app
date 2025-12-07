@@ -2,6 +2,7 @@
 
 import Alert from "@/components/Alert";
 import Loading from "@/components/Loading";
+import MeetingSetup from "@/components/MeetingSetup";
 import { useGetCallById } from "@/hooks/useGetCallById";
 import { useUser } from "@clerk/nextjs";
 import { StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
@@ -33,11 +34,11 @@ const MeetingPage = () => {
 		<main className="h-screen w-full">
 			<StreamCall call={call}>
 				<StreamTheme>
-					{/* {!isSetupComplete ? (
+					{!isSetupComplete ? (
 						<MeetingSetup setIsSetupComplete={setIsSetupComplete} />
 					) : (
-						<MeetingRoom />
-					)} */}
+						// <MeetingRoom />
+					)}
 				</StreamTheme>
 			</StreamCall>
 		</main>
