@@ -2,6 +2,7 @@
 
 import Alert from "@/components/Alert";
 import Loading from "@/components/Loading";
+import MeetingRoom from "@/components/MeetingRoom";
 import MeetingSetup from "@/components/MeetingSetup";
 import { useGetCallById } from "@/hooks/useGetCallById";
 import { useUser } from "@clerk/nextjs";
@@ -11,11 +12,14 @@ import { useState } from "react";
 
 const MeetingPage = () => {
 	const { id } = useParams<{ id: string }>();
+	if (!id) return;
 	const { isLoaded, user } = useUser();
-	const { call, isCallIdLoading } = useGetCallById(id);
+	const { call, isCallLoading } = useGetCallById(id);
 	const [isSetupComplete, setIsSetupComplete] = useState(false);
 
-	if (!isLoaded || isCallIdLoading) <Loading />;
+	console.log("Call: ", call);
+	console.log(isLoaded);
+	if (!isLoaded || isCallLoading) return <Loading />;
 
 	if (!call)
 		return (
@@ -23,6 +27,7 @@ const MeetingPage = () => {
 				Call Not Found
 			</p>
 		);
+
 	const notAllowed =
 		call.type === "invited" &&
 		(!user || !call.state.members.find((m) => m.user.id === user.id));
@@ -37,7 +42,7 @@ const MeetingPage = () => {
 					{!isSetupComplete ? (
 						<MeetingSetup setIsSetupComplete={setIsSetupComplete} />
 					) : (
-						// <MeetingRoom />
+						<MeetingRoom />
 					)}
 				</StreamTheme>
 			</StreamCall>

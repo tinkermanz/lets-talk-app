@@ -1,12 +1,15 @@
+"use client";
+
 import { useUser } from "@clerk/nextjs";
 import {
 	DeviceSettings,
 	useCall,
+	useCallStateHooks,
 	VideoPreview,
 } from "@stream-io/video-react-sdk";
 import Alert from "./Alert";
-import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 const MeetingSetup = ({
 	setIsSetupComplete,
@@ -14,12 +17,13 @@ const MeetingSetup = ({
 	setIsSetupComplete: (value: boolean) => void;
 }) => {
 	const { user } = useUser();
+	console.log(user);
 	if (!user) return;
 
 	const call = useCall();
 	if (!call) {
 		throw new Error(
-			"useStreamCall must be used used within a StreamCall component"
+			"useStreamCall must be used within a StreamCall component."
 		);
 	}
 
@@ -28,10 +32,8 @@ const MeetingSetup = ({
 	const callEndedAt = useCallEndedAt();
 	const callTimeNotArrived =
 		callStartsAt && new Date(callStartsAt) > new Date();
-
-	const [isMicCamToggled, setIsMicCamToggled] = useState(false);
-
 	const callHasEnded = !!callEndedAt;
+	const [isMicCamToggled, setIsMicCamToggled] = useState(false);
 
 	useEffect(() => {
 		if (isMicCamToggled) {
@@ -43,21 +45,20 @@ const MeetingSetup = ({
 		}
 	}, [isMicCamToggled, call.camera, call.microphone]);
 
-	if (callTimeNotArrived) {
+	if (callTimeNotArrived)
 		return (
 			<Alert
-				title={`Your Meeting has not started yet. It is scheduled for ${callStartsAt}`}
+				title={`Your Meeting has not started yet. It is scheduled for ${callStartsAt.toLocaleString()}`}
 			/>
 		);
-	}
-	if (callHasEnded) {
+
+	if (callHasEnded)
 		return (
 			<Alert
-				title="The call has ended by the host"
+				title="The call has been ended by the host"
 				iconUrl="/assets/call-ended.svg"
 			/>
 		);
-	}
 
 	return (
 		<div className="flex h-screen w-full flex-col items-center justify-center gap-3 text-black">

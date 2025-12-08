@@ -16,7 +16,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { LayoutList, Users } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -24,30 +23,27 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { LayoutList, Users } from "lucide-react";
+import EndCallButton from "./EndCallButton";
 
 type CallLayoutType = "grid" | "speaker-left" | "speaker-right";
 
 const MeetingRoom = () => {
 	const [layout, setLayout] = useState<CallLayoutType>("speaker-left");
-
+	const [showParticipants, setShowParticipants] = useState(false);
+	const router = useRouter();
+	const pathname = usePathname();
 	const { user } = useUser();
 	if (!user) return;
 	const { useCallCallingState } = useCallStateHooks();
-
 	const callingState = useCallCallingState();
-
 	if (callingState !== CallingState.JOINED) return <Loading />;
-
-	const [showParticipants, setShowParticipants] = useState(false);
-
-	const router = useRouter();
-	const pathname = usePathname();
 
 	const CallLayout = () => {
 		switch (layout) {
 			case "grid":
 				return <PaginatedGridLayout />;
-			case "speaker-left":
+			case "speaker-right":
 				return <SpeakerLayout participantsBarPosition="left" />;
 			default:
 				return <SpeakerLayout participantsBarPosition="right" />;
@@ -57,13 +53,13 @@ const MeetingRoom = () => {
 	return (
 		<section className="relative h-screen w-full overflow-hidden pt-4 text-white">
 			<Button
-				className="ml-5 font-semibold bg-gray-900 hover:scale-110 rounded-3xl"
+				className="ml-5  font-semibold bg-gray-900 hover:scale-110 rounded-3xl"
 				onClick={() => {
 					const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`;
 					navigator.clipboard.writeText(meetingLink);
 					toast("Meeting Link Copied", {
 						duration: 3000,
-						className: "bg-gray-300 rounded-3xl py-8 px-5 justify-center",
+						className: "!bg-gray-300 !rounded-3xl !py-8 !px-5 !justify-center",
 					});
 				}}
 			>
@@ -114,7 +110,7 @@ const MeetingRoom = () => {
 						<Users size={20} className="text-white" />
 					</div>
 				</button>
-				{/* <EndCallButton /> */}
+				<EndCallButton />
 			</div>
 		</section>
 	);
